@@ -38,48 +38,67 @@ pip install pytorch_lightning==2.0.9.post0
 ```
 
 ## Prepare Data
-Download the UIEB dataset in the `./data/UIEB/` folder, then you have three subfolders `raw-890/`, `reference-890/`, `challenging-60/`.
-
+Download the UIEB dataset in the `./data/UIEB/` folder, then you have three subfolders `raw-890/`, `reference-890/`, `challenging-60/`, just like:
+```
+./data/UIEB/
+├── challenging-60/
+├── challenging.txt
+├── raw-890/
+├── reference-890/
+├── test.txt
+└── train.txt
+```
+Download the LSUI dataset in the `./data/LSUI/` folder, then you have two subfolders `GT/`, `input/`, just like:
+```
+./data/LSUI/
+├── GT/
+├── input/
+├── test.txt
+└── train.txt
+```
 
 ## Train
-
+Train on the training set of UIEB dataset:
+```
+python train_UIEB.py --model_name UIEC2Net --batch_size 16 --epochs 100
+```
 
 ## Test
-After PLE, you can train the segmentation model with the IC algorithm.
+After training, you can enhance the images in the test set and challenging set of UIEB dataset:
 ```
-python main.py --action=train --dataset=DS --split=SP
+python test_UIEB.py --model_name UIEC2Net
 ```
-where `DS` is `breakfast`, `50salads` or `gtea`, and `SP` is the split number (1-5) for 50salads and (1-4) for the other datasets. 
-* The output of evaluation is saved in `result/` folder as an excel file. 
-* The `models/` folder saves the trained model and the `results/` folder saves the predicted action labels of each video in test dataset.
+The generated enhanced images are saved in the `./data/UIEB/All_Results/` folder.
+The folder's structure is like:
+```
+./data/UIEB/All_Results/
+├── FIVE_APLUSNet
+│   ├── C60/
+│   └── T90/
+├── NU2Net
+│   ├── C60/
+│   └── T90/
+├── UIEC2Net
+│   ├── C60/
+│   └── T90/
+├── UTrans
+│   ├── C60/
+│   └── T90/
+└── UWCNN
+    ├── C60/
+    └── T90/
+```
+Each subfolder corresponds to the results of one method.
 
-Here is an example:
-```
-python main.py --action=train --dataset=50salads --split=2
-# F1@0.10: 77.8032
-# F1@0.25: 75.0572
-# F1@0.50: 64.0732
-# Edit: 68.2274
-# Acc: 79.3653
-```
-Please note that we follow [the protocol in MS-TCN++](https://github.com/sj-li/MS-TCN2/issues/2) when evaluating, which is to select the epoch number that can achieve the best average result for all the splits to report the performance.
-
-**If you get error: `AttributeError: module 'distutils' has no attribute 'version'`, you can install a lower version of setuptools:**
-```
-pip uninstall setuptools
-pip install setuptools==59.5.0
-```
 ## Evaluation
-Normally we get the prediction and evaluation after training and do not have to run this independently. In case you want to test the saved model again by prediction and evaluation, please change the `time_data` in `main.py` and run:
+After testing, you can evaluate any method's perfermance on the test set of UIEB dataset:
 ```
-python main.py --action=predict --dataset=DS --split=SP
+python evaluate_UIEB.py --method_name UIEC2Net --folder T90
 ```
-
-## Acknowledgment
-
-The model used in this paper is a refined MS-TCN model. Please refer to the paper [MS-TCN: Multi-Stage Temporal Convolutional Network for Action Segmentation](https://github.com/yabufarha/ms-tcn). We adapted the code of the PyTorch implementation of [Li et al.](https://github.com/ZheLi2020/TimestampActionSeg). Thanks to the original authors for their works!
-
-
+or you can evaluate perfermance on the challenging set of UIEB dataset:
+```
+python evaluate_UIEB.py --method_name UIEC2Net --folder C60
+```
 ## Citation
 
 ```

@@ -369,8 +369,6 @@ def getUCIQE2(loc):
 
 
 def calculate_path(path):
-    # path='/home/iscas/ddz/UIE/data/UIEB/challenging-60/'
-    # path='/home/iscas/ddz/UIE/data/UIEB/reference-890/'
     all_images = os.listdir(path)
 
     sumuiqm1, sumuciqe, sumniqe = 0., 0., 0.
@@ -400,46 +398,39 @@ def calculate_path(path):
     return muiqm, muciqe, mniqe
 
 
-def calculate_path_musiq_uranker(all_path):
-    # path='/home/iscas/ddz/UIE/data/UIEB/challenging-60/'
-    # path='/home/iscas/ddz/UIE/data/UIEB/reference-890/'
-    
+def calculate_path_NRIQA(path):
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     musiq_metrics = pyiqa.create_metric('musiq-koniq', device=device) # input 0~1 when test
     uranker_metrics = pyiqa.create_metric('uranker', device=device) # input 0~1
+    
+    all_images = os.listdir(path)
+    sumuranker, summusiq = 0., 0.
+    num_images = 0
 
-    for method_name in os.listdir(all_path):
-        if os.path.isdir(os.path.join(all_path, method_name)):
-            path = os.path.join(all_path, method_name, "C60")
-            if os.path.exists(path) and method_name == "DDPM_UIEC2Net":
-                print("Method: " + method_name)
-                all_images = os.listdir(path)
+    for item in tqdm(all_images):
+        impath = os.path.join(path, item)
+        imgRGB = Image.open(impath).convert('RGB')
+        transform = transforms.ToTensor()
+        img_tensor = transform(imgRGB).to(device)
+        musiq_num = musiq_metrics(img_tensor).item()
+        uranker_num = uranker_metrics(img_tensor.unsqueeze(0)).item()
 
-                sumuranker, summusiq = 0., 0.
-                num_images = 0
+        sumuranker = sumuranker + uranker_num
+        summusiq = summusiq + musiq_num
 
-                for item in tqdm(all_images):
-                    impath = os.path.join(path, item)
-                    imgRGB = Image.open(impath).convert('RGB')
-                    transform = transforms.ToTensor()
-                    img_tensor = transform(imgRGB).to(device)
-                    musiq_num = musiq_metrics(img_tensor).item()
-                    uranker_num = uranker_metrics(img_tensor.unsqueeze(0)).item()
+        num_images += 1
 
-                    sumuranker = sumuranker + uranker_num
-                    summusiq = summusiq + musiq_num
-
-                    num_images += 1
-
-                muranker = sumuranker / num_images
-                mmusiq = summusiq / num_images
-                print("URanker: " + str(muranker))
-                print("MUSIQ: " + str(mmusiq))
+    muranker = sumuranker / num_images
+    mmusiq = summusiq / num_images
+    muiqm, muciqe, mniqe = calculate_path(path)
+    print("UCIQE: ", muciqe)
+    print("UIQM: ", muiqm)
+    print("NIQE: ", mniqe)
+    print("URanker: " + str(muranker))
+    print("MUSIQ: " + str(mmusiq))
 
 
-def calculate_path_NRIQA(all_path):
-    # path='/home/iscas/ddz/UIE/data/UIEB/challenging-60/'
-    # path='/home/iscas/ddz/UIE/data/UIEB/reference-890/'
+def calculate_All_non_reference_NRIQA(all_path):
     
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     musiq_metrics = pyiqa.create_metric('musiq-koniq', device=device) # input 0~1 when test
@@ -451,7 +442,7 @@ def calculate_path_NRIQA(all_path):
                 path = os.path.join(all_path, method_name)
             elif "UIEB" in all_path:
                 path = os.path.join(all_path, method_name, "C60")
-            if os.path.exists(path) and method_name == "DDPM_Fusion":
+            if os.path.exists(path):
                 print("Method: " + method_name)
                 all_images = os.listdir(path)
                 if len(all_images) == 0:

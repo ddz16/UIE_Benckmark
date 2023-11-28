@@ -2,6 +2,7 @@ import os
 import wandb
 import numpy as np
 from argparse import Namespace
+import argparse
 
 import pyiqa
 import torch
@@ -123,31 +124,25 @@ class TrainUIEModel(pl.LightningModule):
 
 
 def main():
-    args = {
-        'crop_size':256,
-        'input_norm':False,
-        'epochs':100,
-        'batch_size':8,
-        'num_workers':4,
-        'initlr':0.001,
-        'weight_decay':0.000,
-        'model_name':"UTrans",
-        'lr_config':'CyclicLR',
-    }
-    # UTrans
-    # args = {
-    #     'crop_size':256,
-    #     'input_norm':False,
-    #     'epochs':150,
-    #     'batch_size':8,
-    #     'num_workers':4,
-    #     'initlr':0.0005,
-    #     'weight_decay':0.001,
-    #     'model_name':"UTrans",
-    #     'lr_config':'StepLR',
-    # }
+    parser = argparse.ArgumentParser(description='Trainging UIEB dataset')
 
-    hparams = Namespace(**args)
+    # basic config
+    parser.add_argument('--model_name', type=str, default='UIEC2Net', 
+                        help='model name, options:[UIEC2Net, UTrans, NU2Net, UWCNN, FIVE_APLUS]')
+    # data loader
+    parser.add_argument('--crop_size', type=int, default=256, help='crop size')
+    parser.add_argument('--input_norm', action='store_true', help='norm the input image to [-1,1]')
+
+    # optimization
+    parser.add_argument('--epochs', type=int, default=100, help='epoch num')
+    parser.add_argument('--batch_size', type=int, default=8, help='batch size')
+    parser.add_argument('--num_workers', type=int, default=4, help='worker num')
+    parser.add_argument('--initlr', type=float, default=0.001, help='learning rate')
+    parser.add_argument('--weight_decay', type=float, default=0.000, help='weight decay')
+    parser.add_argument('--lr_config', type=str, default="CyclicLR", 
+                        help='learning rate schedule, options:[CyclicLR, StepLR]')
+
+    hparams = parser.parse_args()
 
     seed = 42
     seed_everything(seed)
