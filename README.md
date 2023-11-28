@@ -62,7 +62,14 @@ Train on the training set of UIEB dataset:
 ```
 python train_UIEB.py --model_name UIEC2Net --batch_size 16 --epochs 100
 ```
-
+We provide four models' checkpoints trained on UIEB dataset in the `./checkpoints/UIEB/` folder:
+```
+./checkpoints/UIEB/
+├── FIVE_APLUS.ckpt
+├── NU2Net.ckpt
+├── UIEC2Net.ckpt
+└── UWCNN.ckpt
+```
 ## Test
 After training, you can enhance the images in the test set and challenging set of UIEB dataset:
 ```
