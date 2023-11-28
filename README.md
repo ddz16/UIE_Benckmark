@@ -1,9 +1,7 @@
 # Underwater Image Enhancement Baselines
 
 This repository provides implementation of some underwater image enhancement methods and datasets, including:
-<!-- - [ ] Fusion: paper
-- [x] 项目2
-- [ ] 项目3 -->
+
 **Supported Methods**
 | Method | Pub | Language | Paper | Reference Codes |
 | ------ | ------- | ----- | ----- | --------------- |
