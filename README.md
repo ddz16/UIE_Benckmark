@@ -26,42 +26,25 @@ This repository provides implementation of some underwater image enhancement met
 
 ## Environment
 
-Our environment:
 ```
-Ubuntu 16.04.7 LTS
-CUDA Version: 11.1
-```
-Based on anaconda or miniconda, you can install the required packages as follows:
-```
-conda create --name timestamp python=3.9
-conda activate timestamp
-pip install torch==1.10.0+cu111 torchvision==0.11.0+cu111 torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html
-pip install matplotlib
-pip install tensorboard
-pip install xlsxwriter
-pip install scikit-learn
+conda create -n uie python=3.9
+conda activate uie
+
+pip install torch==1.13.0+cu117 torchvision==0.14.0+cu117 torchaudio==0.13.0 -f https://download.pytorch.org/whl/torch_stable.html
+
+pip install pyiqa
+
+pip install pytorch_lightning==2.0.9.post0
 ```
 
 ## Prepare Data
-* Download the three datasets, which contains the features and the ground truth labels. (~30GB) (try to download it from [here](https://zenodo.org/record/3625992#.Xiv9jGhKhPY)))
-* Extract the compressed file to the `data/` folder.
-* The three `.npy` files in the folder `data/` are the timestamp annotations provided by [Li et al.](https://github.com/ZheLi2020/TimestampActionSeg).
+Download the UIEB dataset in the `./data/UIEB/` folder, then you have three subfolders `raw-890/`, `reference-890/`, `challenging-60/`.
 
-## Pseudo-Label Ensembling (PLE)
-Before training, we regard PLE as a pre-processing step since it relies on only the visual features of frames. You can run the following commands to generate pseudo-label sequences by the PLE algorithm for all videos in the 50salads dataset:
-```
-python generate_pseudo.py --dataset 50salads --metric euclidean --feature 1024   # RGB features
-python generate_pseudo.py --dataset 50salads --metric euclidean --feature 2048   # optical flow features
-python intersection_pseudo.py --dataset 50salads
-```
-Afterwards, you can find the generated pseudo-label sequences in the folder `data/I3D_merge/50salads/`, and the console will also output the evaluation metrics for the pseudo-label sequences: labeling rate and accuracy of pseudo-labels.
-```
-label rate: 0.5117809793880469
-label acc: 0.9549147886799857
-```
-You can also use above commands (change the `--dataset` argument) to generate pseudo-label sequences for other two datasets.
 
-## Iterative Clustering (IC)
+## Train
+
+
+## Test
 After PLE, you can train the segmentation model with the IC algorithm.
 ```
 python main.py --action=train --dataset=DS --split=SP
