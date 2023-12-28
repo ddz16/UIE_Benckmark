@@ -107,10 +107,10 @@ python evaluate_UIEB.py --method_name UIEC2Net --folder C60
 ## Citation
 
 ```
-@inproceedings{du2023timestamp,
-  title={Timestamp-Supervised Action Segmentation from the Perspective of Clustering},
-  author={Du, Dazhao and Li, Enhan and Si, Lingyu and Xu, Fanjiang and Sun, Fuchun},
-  booktitle={IJCAI},
+@article{du2023uiedp,
+  title={UIEDP: Underwater Image Enhancement with Diffusion Prior},
+  author={Du, Dazhao and Li, Enhan and Si, Lingyu and Xu, Fanjiang and Niu, Jianwei and Sun, Fuchun},
+  journal={arXiv preprint arXiv:2312.06240},
   year={2023}
 }
 ```
