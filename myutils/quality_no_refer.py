@@ -400,7 +400,7 @@ def calculate_path(path):
 
 def calculate_path_NRIQA(path):
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-    musiq_metrics = pyiqa.create_metric('musiq-koniq', device=device) # input 0~1 when test
+    musiq_metrics = pyiqa.create_metric('musiq', device=device) # input 0~1 when test
     uranker_metrics = pyiqa.create_metric('uranker', device=device) # input 0~1
     
     all_images = os.listdir(path)
@@ -433,7 +433,7 @@ def calculate_path_NRIQA(path):
 def calculate_All_non_reference_NRIQA(all_path):
     
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-    musiq_metrics = pyiqa.create_metric('musiq-koniq', device=device) # input 0~1 when test
+    musiq_metrics = pyiqa.create_metric('musiq', device=device) # input 0~1 when test
     uranker_metrics = pyiqa.create_metric('uranker', device=device) # input 0~1
 
     for method_name in os.listdir(all_path):
