@@ -107,10 +107,13 @@ python evaluate_UIEB.py --method_name UIEC2Net --folder C60
 ## Citation
 
 ```
-@article{du2023uiedp,
-  title={UIEDP: Underwater Image Enhancement with Diffusion Prior},
-  author={Du, Dazhao and Li, Enhan and Si, Lingyu and Xu, Fanjiang and Niu, Jianwei and Sun, Fuchun},
-  journal={arXiv preprint arXiv:2312.06240},
-  year={2023}
+@article{du2025uiedp,
+  title={UIEDP: Boosting underwater image enhancement with diffusion prior},
+  author={Du, Dazhao and Li, Enhan and Si, Lingyu and Zhai, Wenlong and Xu, Fanjiang and Niu, Jianwei and Sun, Fuchun},
+  journal={Expert Systems with Applications},
+  volume={259},
+  pages={125271},
+  year={2025},
+  publisher={Elsevier}
 }
 ```
